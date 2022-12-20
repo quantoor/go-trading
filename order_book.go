@@ -18,8 +18,18 @@ func (ob *OrderBook) Update(price float64, quantity float64, isBuy bool) {
 	} else {
 		if isBuy {
 			ob.Bids.insertBid(price, quantity)
+			bestAsk := ob.BestAsk()
+			for bestAsk != nil && price >= bestAsk.price {
+				ob.Asks.deleteHead()
+				bestAsk = ob.BestAsk()
+			}
 		} else {
 			ob.Asks.insertAsk(price, quantity)
+			bestBid := ob.BestBid()
+			for bestBid != nil && price <= bestBid.price {
+				ob.Bids.deleteHead()
+				bestBid = ob.BestBid()
+			}
 		}
 	}
 }
@@ -34,6 +44,10 @@ func (ob *OrderBook) BestAsk() *OrderBookOrder {
 
 func (ob *OrderBook) BestBid() *OrderBookOrder {
 	return ob.Bids.head
+}
+
+func (ob *OrderBook) IsEmpty() bool {
+	return ob.Asks.head == nil && ob.Bids.head == nil
 }
 
 func (ob *OrderBook) PrintBestBidAsk() {
