@@ -1,4 +1,4 @@
-package tradingo
+package core
 
 import "fmt"
 
