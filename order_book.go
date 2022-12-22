@@ -50,8 +50,16 @@ func (ob *OrderBook) IsEmpty() bool {
 	return ob.Asks.head == nil && ob.Bids.head == nil
 }
 
+func (ob *OrderBook) Reset() {
+	ob.Asks = OrderBookOrders{}
+	ob.Bids = OrderBookOrders{}
+}
+
 func (ob *OrderBook) PrintBestBidAsk() {
-	fmt.Printf("%+v -> %+v\n", ob.BestBid().price, ob.BestAsk().price)
+	if ob.BestAsk() != nil && ob.BestBid() != nil {
+		//fmt.Printf("%+v -> %+v\n", ob.BestBid().price, ob.BestAsk().price)
+		fmt.Printf("%+v, %+v -> %+v, %+v\n", ob.BestBid().price, ob.BestBid().quantity, ob.BestAsk().price, ob.BestAsk().quantity)
+	}
 }
 
 type OrderBookOrder struct {
@@ -137,6 +145,9 @@ func (o *OrderBookOrders) insertAsk(price float64, quantity float64) {
 }
 
 func (o *OrderBookOrders) delete(price float64) {
+	if o.head == nil {
+		return
+	}
 	if price == o.head.price {
 		o.deleteHead()
 		return
