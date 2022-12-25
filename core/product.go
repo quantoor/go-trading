@@ -1,18 +1,13 @@
 package core
 
-type Filter struct {
-	Min  float64
-	Max  float64
-	Tick float64
-}
-
 type ProductInfo struct {
+	Type          string
 	Symbol        string
 	BaseCurrency  string
 	QuoteCurrency string
-	ContractSize  int
-	PriceFilter   Filter
-	QtyFilter     Filter
+	PriceTick     float64
+	MinQty        float64
+	QtyTick       float64
 }
 
 type ProductsInfo map[string]ProductInfo
